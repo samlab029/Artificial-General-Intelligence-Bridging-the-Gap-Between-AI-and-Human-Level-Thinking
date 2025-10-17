@@ -1,0 +1,98 @@
+"""
+AGI Simulation Example: Multi-Task Learning and Transfer Learning
+Author: Sam, 18 | Kaggle Enthusiast | SAMTECH
+
+This code simulates an AGI-style analysis, demonstrating:
+1. Multi-task learning performance across different domains
+2. Transfer learning using a pretrained model
+3. Benchmark evaluation and visualization
+"""
+
+# --- Libraries ---
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
+
+# -------------------------------
+# 1. Multi-Task Learning Simulation
+# -------------------------------
+
+# Define tasks and simulated accuracy/loss
+tasks = ["Math", "Language", "Vision", "Planning", "Commonsense Reasoning"]
+accuracy = [0.72, 0.85, 0.79, 0.65, 0.60]  # simulated performance
+loss = [0.28, 0.15, 0.21, 0.35, 0.40]
+
+multi_task_df = pd.DataFrame({
+    "Task": tasks,
+    "Accuracy": accuracy,
+    "Loss": loss
+})
+
+# Plot Accuracy
+plt.figure(figsize=(10,5))
+plt.bar(multi_task_df["Task"], multi_task_df["Accuracy"], color='skyblue')
+plt.title("Simulated Multi-Task Learning Accuracy")
+plt.ylabel("Accuracy")
+plt.ylim(0,1)
+plt.grid(axis='y')
+plt.show()
+
+# Plot Loss
+plt.figure(figsize=(10,5))
+plt.bar(multi_task_df["Task"], multi_task_df["Loss"], color='salmon')
+plt.title("Simulated Multi-Task Learning Loss")
+plt.ylabel("Loss")
+plt.ylim(0,1)
+plt.grid(axis='y')
+plt.show()
+
+# -------------------------------
+# 2. Transfer Learning Demonstration
+# -------------------------------
+
+# Load pretrained MobileNetV2 model
+model = MobileNetV2(weights='imagenet')
+
+# Example image (replace 'elephant.jpg' with any sample image in Kaggle dataset)
+img_path = 'elephant.jpg'
+try:
+    img = image.load_img(img_path, target_size=(224, 224))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+
+    preds = model.predict(x)
+    print("Top 3 Predictions from Transfer Learning Model:")
+    for idx, pred in enumerate(decode_predictions(preds, top=3)[0]):
+        print(f"{idx+1}. {pred[1]} - Probability: {pred[2]:.2f}")
+except:
+    print(f"Image {img_path} not found. Upload an image to test transfer learning.")
+
+# -------------------------------
+# 3. Multi-Domain Benchmark Visualization
+# -------------------------------
+
+domains = ["Math", "Language", "Vision", "Planning", "Commonsense Reasoning"]
+benchmark_scores = [0.72, 0.85, 0.79, 0.65, 0.60]
+
+plt.figure(figsize=(10,5))
+plt.plot(domains, benchmark_scores, marker='o', linestyle='-', color='purple')
+plt.title("Simulated Multi-Domain Benchmark Scores for AI Model")
+plt.ylabel("Accuracy")
+plt.ylim(0,1)
+plt.grid(True)
+plt.show()
+
+# -------------------------------
+# 4. Summary Table
+# -------------------------------
+summary_df = multi_task_df.copy()
+summary_df["TransferLearningExample"] = ["Elephant Detection" if t=="Vision" else "N/A" for t in tasks]
+print("\n=== AGI Simulation Summary ===")
+print(summary_df)
+
+
+( Almost Help Taken By ChatGPT)
